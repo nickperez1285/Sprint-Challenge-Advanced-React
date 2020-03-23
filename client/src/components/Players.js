@@ -1,24 +1,39 @@
 import React from 'react'; 
-import { useState, useEffect } from "react";
-import axios from 'axios'
-
-const Players = () => {
-	const [state, setState]= useState([])
-
-	useEffect( ()=>{
-		axios.get("http://localhost:5000/api/players")
-		.then(res => setState(res.data))
+import axios from 'axios';
 
 
-	} , [])
 
-	console.log(state)
+export default class Players extends React.Component {
+   state = {
+    players: []
+  }
 
+ componentDidMount() {
+    axios
+    .get('http://localhost:5000/api/players')
+    .then(res => {
+      console.log(res.data);
+      this.setState({
+        players: res.data
+      })
+    }) 
+    .catch(error => {
+      console.log( error);
+      
+    })
+  }
+
+
+
+render(){
 return(
 	<div> 
-	<p> hello from players</p> 
-	{state.map(pl=>
-		<p>{pl.name}</p>
+	
+	{this.state.players.map(pl=>
+		<div className="player-attrs">Name: {pl.name}<br/>
+		Country : {pl.country}<br/>
+		Searches : {pl.searches}<br/>
+		ID : {pl.id}<hr/></div>
 
 		)}
 
@@ -26,4 +41,9 @@ return(
 	)
 }
 
-export default Players 
+
+}
+
+
+
+
